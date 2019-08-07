@@ -8,6 +8,7 @@ import vim
 
 import taghelper_c
 import taghelper_python
+import taghelper_diff
 
 
 CACHE = {}
@@ -18,6 +19,7 @@ PARSERS = {
     'c': taghelper_c.parse,
     'cpp': taghelper_c.parse,
     'python': taghelper_python.parse,
+    'diff': taghelper_diff.parse,
 }
 
 

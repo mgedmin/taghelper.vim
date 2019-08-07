@@ -14,6 +14,7 @@ Supports multiple languages:
 - Python
 - C
 - C++
+- diff files
 
 Doesn't actually use tags files -- instead it has its own hacky parsers.
 
@@ -24,7 +25,7 @@ Doesn't actually use tags files -- instead it has its own hacky parsers.
 Installation
 ------------
 
-Use a plugin manager like vim-plug_::
+I suggest you use a plugin manager like vim-plug_::
 
   " your vimrc
 
