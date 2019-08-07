@@ -12,7 +12,7 @@ line.
 Inspired by Michal Vitecek's pythonhelper.vim_ and my chelper.vim_.  Intended
 to replace both of them.
 
-Needs Vim 7.x built with Python support.
+Needs Vim 8.0.0251 or newer, built with Python support.
 
 Supports multiple languages:
 
