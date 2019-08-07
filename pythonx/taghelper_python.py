@@ -13,7 +13,6 @@ def indentlevel(indent):
 def parse(buffer, tags):
     stack = []
     curtag = None
-    last_non_blank_line = 1
     for n, line in enumerate(buffer, 1):
         match = INDENT_COMMENT_RE.match(line.rstrip())
         indent, content, comment = match.groups()
@@ -28,7 +27,7 @@ def parse(buffer, tags):
 
             while stack and stack[-1].level >= level:
                 oldtag = stack.pop()
-                oldtag.lastline = last_non_blank_line
+                oldtag.lastline = n - 1
 
             if stack:
                 name = '%s.%s' % (stack[-1].name, name)
@@ -36,9 +35,6 @@ def parse(buffer, tags):
             curtag.level = level
             stack.append(curtag)
 
-        if content or comment:
-            last_non_blank_line = n
-
     while stack:
         oldtag = stack.pop()
-        oldtag.lastline = last_non_blank_line
+        oldtag.lastline = n

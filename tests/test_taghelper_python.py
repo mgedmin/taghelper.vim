@@ -30,7 +30,7 @@ def test_parse_functions():
     ''')
     tags = Tags()
     parse(buffer, tags)
-    assert tags.tags == [Tag('foo', 4, 6), Tag('bar', 8, 9)]
+    assert tags.tags == [Tag('foo', 4, 7), Tag('bar', 8, 9)]
 
 
 def test_parse_classes():
@@ -50,6 +50,6 @@ def test_parse_classes():
     parse(buffer, tags)
     assert tags.tags == [
         Tag('MyClass', 4, 10),
-        Tag('MyClass.__init__', 6, 7),
+        Tag('MyClass.__init__', 6, 8),
         Tag('MyClass.bar', 9, 10),
     ]
