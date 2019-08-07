@@ -4,6 +4,11 @@ Overview
 Vim plugin to show the name of the current tag (usually function) in the status
 line.
 
+.. image:: doc/screenshot.png
+   :width: 734
+   :height: 475
+   :alt: screenshot
+
 Inspired by Michal Vitecek's pythonhelper.vim_ and my chelper.vim_.  Intended
 to replace both of them.
 
