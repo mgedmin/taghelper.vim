@@ -24,7 +24,7 @@ function taghelper#showtags()
     echoerr "taghelper.vim needs Python support"
     return
   endif
-  if !exists("*pyx")
+  if !exists(":pyx")
     echoerr "taghelper.vim needs vim 8.0.0251 or a sufficienlty recent neovim"
     return
   endif
