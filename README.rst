@@ -32,15 +32,7 @@ Installation
 
 I suggest you use a plugin manager like vim-plug_::
 
-  " your vimrc
-
-  ...
-
-  call plug#begin()
-    ...
   Plug 'mgedmin/taghelper.vim'
-    ...
-  call plug#end()
 
 .. _vim-plug: https://github.com/junegunn/vim-plug
 
