@@ -1,6 +1,10 @@
 Overview
 --------
 
+.. image:: https://travis-ci.org/mgedmin/taghelper.vim.svg?branch=master
+    :target: https://travis-ci.org/mgedmin/taghelper.vim
+
+
 Vim plugin to show the name of the current tag (usually function) in the status
 line.
 
