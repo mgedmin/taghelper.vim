@@ -11,11 +11,13 @@ function taghelper#cursormoved()
     let w:TagHelperCurTag = ''
     return
   endif
+  pyx import taghelper
   let w:TagHelperCurTag = pyxeval('taghelper.findtag()')
 endfunction
 
 function taghelper#bufdeleted()
   let w:TagHelperCurTag = ""
+  pyx import taghelper
   exec 'pyx taghelper.deltags(' . expand("<abuf>") . ')'
 endfunction
 

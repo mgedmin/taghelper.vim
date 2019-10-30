@@ -1,12 +1,11 @@
-" File: chelper.vim
+" File: taghelper.vim
 " Author: Marius Gedminas <marius@gedmin.as>
-" Version: 0.1.2
-" Last Modified: 2019-08-13
+" Version: 0.2.0
+" Last Modified: 2019-10-30
 
 augroup TagHelper
   autocmd!
   if exists(":pyx") && (has("python") || has("python3"))
-    pyx import taghelper
     autocmd CursorMoved * call taghelper#cursormoved()
     autocmd CursorMovedI * call taghelper#cursormoved()
     autocmd BufDelete * silent call taghelper#bufdeleted()
