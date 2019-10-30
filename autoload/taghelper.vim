@@ -27,8 +27,9 @@ function taghelper#showtags()
     return
   endif
   if !exists(":pyx")
-    echoerr "taghelper.vim needs vim 8.0.0251 or a sufficienlty recent neovim"
+    echoerr "taghelper.vim needs vim 8.0.0251 or neovim 0.4.0"
     return
   endif
+  pyx import taghelper
   exec 'pyx taghelper.showtags(' . bufnr("") . ', ' . b:changedtick . ')'
 endfunction
