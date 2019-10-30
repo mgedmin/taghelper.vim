@@ -1,0 +1,20 @@
+language: python
+python:
+  - 2.7
+  - 3.5
+  - 3.6
+  - 3.7
+install:
+  - pip install tox-travis
+script:
+  - tox
+cache: pip
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net##mgedmin"
+    on_success: change
+    on_failure: always
+    template:
+      # ping my nick so I get a pushbullet notification on my phone
+      - "mgedmin: %{repository_name} (%{branch}) build %{result}: %{build_url}"
