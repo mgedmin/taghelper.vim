@@ -53,3 +53,25 @@ def test_parse_classes():
         Tag('MyClass.__init__', 6, 8),
         Tag('MyClass.bar', 9, 10),
     ]
+
+
+def test_parse_decorators():
+    buffer = prepare('''
+         1|#!/usr/bin/python3
+         2|import sys
+         3|
+         4|def foo(x, y):
+         5|    z = x + y
+         6|    return z
+         7|
+         8|@pytest.mark.parametrize(['foo', 'bar'], [
+         9|    ('a', 'b'),
+         0|    ('c', 'd'),
+        11|]
+        12|@mock.patch('os.system', side_effect=OSError)
+        13|def bar():
+        14|    pass
+    ''')
+    tags = Tags()
+    parse(buffer, tags)
+    assert tags.tags == [Tag('foo', 4, 7), Tag('bar', 8, 14)]
