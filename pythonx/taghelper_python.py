@@ -46,6 +46,11 @@ def parse(buffer, tags):
             stack.append(curtag)
 
             first_decorator_line = None
+        elif content:
+            level = indentlevel(indent)
+            while stack and stack[-1].level >= level:
+                oldtag = stack.pop()
+                oldtag.lastline = n - 1
 
     while stack:
         oldtag = stack.pop()
