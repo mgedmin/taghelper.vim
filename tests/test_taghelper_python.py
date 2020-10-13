@@ -109,7 +109,7 @@ def test_parse_decorators():
          7|
          8|@pytest.mark.parametrize(['foo', 'bar'], [
          9|    ('a', 'b'),
-         0|    ('c', 'd'),
+        10|    ('c', 'd'),
         11|]
         12|@mock.patch('os.system', side_effect=OSError)
         13|def bar():
