@@ -46,7 +46,8 @@ def parse(buffer, tags):
             stack.append(curtag)
 
             first_decorator_line = None
-        elif content and first_decorator_line is None:
+        elif (content and first_decorator_line is None and not
+              content.startswith(')')):
             level = indentlevel(indent)
             while stack and stack[-1].level >= level:
                 oldtag = stack.pop()

@@ -118,3 +118,20 @@ def test_parse_decorators():
     tags = Tags()
     parse(buffer, tags)
     assert tags.tags == [Tag('foo', 4, 7), Tag('bar', 8, 14)]
+
+
+def test_parse_functions_with_long_signatures():
+    buffer = prepare('''
+         1|#!/usr/bin/python3
+         2|import sys
+         3|
+         4|def foo(
+         5|    x: int,
+         6|    y: int,
+         7|) -> int:
+         8|    z = x + y
+         9|    return z
+    ''')
+    tags = Tags()
+    parse(buffer, tags)
+    assert tags.tags == [Tag('foo', 4, 9)]
