@@ -1,5 +1,6 @@
 
 def clean_filename(filename):
+    filename = filename.partition('\t')[0]
     if filename.startswith(('a/', 'b/')):
         filename = filename[2:]
     return filename
@@ -23,7 +24,7 @@ def parse(buffer, tags):
             if curtag and curtag.lastline is None:
                 curtag.lastline = n - 1
             curtag = tags.add(filename, n)
-        elif line.startswith('+++ ') and curtag and curtag.name == '/dev/null':
+        elif line.startswith('+++ ') and curtag:
             curtag.name = clean_filename(line[4:])
         elif line.startswith(' '):
             diff_start = False

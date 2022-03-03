@@ -33,6 +33,22 @@ def test_parse():
     ]
 
 
+def test_parse_with_timestamp():
+    buffer = prepare('''
+         1|--- /foo/bar.py.orig\t2021-05-28 18:26:07.777325843 +0300
+         2|+++ /foo/bar.py\t2022-01-14 12:15:52.905282890 +0200
+         3|@@ -1,2 +1,3 @@
+         4| import re
+         5|+import logging
+         6| import urllib
+    ''')
+    tags = Tags()
+    parse(buffer, tags)
+    assert tags.tags == [
+        Tag('/foo/bar.py', 1, 6),
+    ]
+
+
 def test_parse_git_diff():
     buffer = prepare('''
          1|diff --git a/foo/bar.py b/foo/bar.py
