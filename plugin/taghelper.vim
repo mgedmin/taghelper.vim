@@ -1,7 +1,7 @@
 " File: taghelper.vim
 " Author: Marius Gedminas <marius@gedmin.as>
-" Version: 0.3.2
-" Last Modified: 2020-11-05
+" Version: 0.4.0
+" Last Modified: 2022-06-07
 
 augroup TagHelper
   autocmd!
