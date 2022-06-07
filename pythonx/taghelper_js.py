@@ -41,7 +41,3 @@ def parse(buffer, tags):
             while stack and stack[-1].level >= level:
                 oldtag = stack.pop()
                 oldtag.lastline = n
-
-    while stack:
-        oldtag = stack.pop()
-        oldtag.lastline = n
