@@ -1,7 +1,7 @@
 import re
 
 
-CLASS_RE = re.compile(r'(\s*)(?:export\s+)?class\s+([^(: \t]+).*')
+CLASS_RE = re.compile(r'(\s*)(?:export\s+)?(?:default\s+)?class\s+([^(: \t]+).*')
 
 FUNC_RE = re.compile(
     r'(\s*)(?:static\s+)?(?:get\s+)?([^(: \t]+)[(].*[)]\s*{$')
