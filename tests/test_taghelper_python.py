@@ -135,3 +135,25 @@ def test_parse_functions_with_long_signatures():
     tags = Tags()
     parse(buffer, tags)
     assert tags.tags == [Tag('foo', 4, 9)]
+
+
+def test_parse_long_assignments():
+    buffer = prepare('''
+         1|#!/usr/bin/python3
+         2|import sys
+         3|
+         4|foo = [
+         5|    1,
+         6|    2,
+         7|]
+         8|
+         9|bar = """
+        10|    hello
+        11|"""
+    ''')
+    tags = Tags()
+    parse(buffer, tags)
+    assert tags.tags == [
+        Tag('foo', 4, 8),
+        Tag('bar', 9, 11),
+    ]

@@ -1,10 +1,20 @@
 import re
 
-
 INDENT_COMMENT_RE = re.compile(r'(\s*)([^#]*)(.*)')
 CLASS_RE = re.compile(r'class\s+([^(: \t]+).*')
 DEF_RE = re.compile(r'(?:async\s*)?def\s+([^( \t]+).*')
 DECORATOR_RE = re.compile(r'@')
+ASSIGNMENT_RE = re.compile(
+    r'^([a-zA-Z_][a-zA-Z_0-9]*)\s*(?::.*)?=\s([\[({]|"""|\'\'\')$')
+
+
+CLOSING = {
+    '[': ']',
+    '{': '}',
+    '(': ')',
+    '"""': '"""',
+    "'''": "'''",
+}
 
 
 def indentlevel(indent):
@@ -14,6 +24,7 @@ def indentlevel(indent):
 def parse(buffer, tags):
     stack = []
     curtag = None
+    closing = None
     first_decorator_line = None
     for n, line in enumerate(buffer, 1):
         match = INDENT_COMMENT_RE.match(line.rstrip())
@@ -27,6 +38,14 @@ def parse(buffer, tags):
         match = CLASS_RE.match(content)
         if not match:
             match = DEF_RE.match(content)
+
+        if match:
+            closing = ')'
+
+        if not match and not indent:
+            match = ASSIGNMENT_RE.match(content)
+            if match:
+                closing = CLOSING[match.group(2)]
 
         if match:
             name = match.group(1)
@@ -46,8 +65,8 @@ def parse(buffer, tags):
             stack.append(curtag)
 
             first_decorator_line = None
-        elif (content and first_decorator_line is None and not
-              content.startswith(')')):
+        elif (content and first_decorator_line is None and (not closing or not
+              content.startswith(closing))):
             level = indentlevel(indent)
             while stack and stack[-1].level >= level:
                 oldtag = stack.pop()
