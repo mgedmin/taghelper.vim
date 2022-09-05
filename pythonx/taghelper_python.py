@@ -5,7 +5,8 @@ CLASS_RE = re.compile(r'class\s+([^(: \t]+).*')
 DEF_RE = re.compile(r'(?:async\s*)?def\s+([^( \t]+).*')
 DECORATOR_RE = re.compile(r'@')
 ASSIGNMENT_RE = re.compile(
-    r'^([a-zA-Z_][a-zA-Z_0-9]*)\s*(?::.*)?=\s([\[({]|"""|\'\'\')$')
+    r'^([a-zA-Z_][a-zA-Z_0-9]*)\s*(?::.*)?=\s([\[({]|[(]?[fr]?(?:"""|\'\'\'))$'
+)
 
 
 CLOSING = {
@@ -14,6 +15,16 @@ CLOSING = {
     '(': ')',
     '"""': '"""',
     "'''": "'''",
+    'f"""': '"""',
+    "f'''": "'''",
+    'r"""': '"""',
+    "r'''": "'''",
+    '("""': '""")',
+    "('''": "''')",
+    '(f"""': '""")',
+    "(f'''": "''')",
+    '(r"""': '""")',
+    "(r'''": "''')",
 }
 
 
@@ -25,6 +36,7 @@ def parse(buffer, tags):
     stack = []
     curtag = None
     closing = None
+    closes_with_indent = False
     first_decorator_line = None
     for n, line in enumerate(buffer, 1):
         match = INDENT_COMMENT_RE.match(line.rstrip())
@@ -40,12 +52,14 @@ def parse(buffer, tags):
             match = DEF_RE.match(content)
 
         if match:
-            closing = ')'
+            closing = None
+            closes_with_indent = True
 
         if not match and not indent:
             match = ASSIGNMENT_RE.match(content)
             if match:
                 closing = CLOSING[match.group(2)]
+                closes_with_indent = False
 
         if match:
             name = match.group(1)
@@ -65,8 +79,13 @@ def parse(buffer, tags):
             stack.append(curtag)
 
             first_decorator_line = None
-        elif (content and first_decorator_line is None and (not closing or not
-              content.startswith(closing))):
+        elif content == closing:
+            if not closes_with_indent:
+                oldtag = stack.pop()
+                oldtag.lastline = n
+            closing = None
+        elif (closes_with_indent and content and first_decorator_line is None
+              and not content.startswith(')')):
             level = indentlevel(indent)
             while stack and stack[-1].level >= level:
                 oldtag = stack.pop()
