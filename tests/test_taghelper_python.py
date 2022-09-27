@@ -147,9 +147,9 @@ def test_parse_long_assignments():
          6|    2,
          7|]
          8|
-         9|bar = """
+         9|bar = do_stuff_with(foo, """
         10|hello
-        11|"""
+        11|""")
         12|
         13|baz = {
         14|    'x': {
@@ -161,6 +161,6 @@ def test_parse_long_assignments():
     parse(buffer, tags)
     assert tags.tags == [
         Tag('foo', 4, 7),
-        Tag('bar', 9, 11),
+        Tag('bar', 9, 12),
         Tag('baz', 13, 17),
     ]

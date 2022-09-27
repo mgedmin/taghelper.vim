@@ -1,3 +1,9 @@
+"""
+" HACK to make this file source'able by vim as well as importable by Python:
+pyx import sys; sys.modules.pop("taghelper_python", None);
+pyx sys.modules.pop("taghelper", None); import taghelper
+finish
+"""
 import re
 
 INDENT_COMMENT_RE = re.compile(r'(\s*)([^#]*)(.*)')
@@ -5,7 +11,10 @@ CLASS_RE = re.compile(r'class\s+([^(: \t]+).*')
 DEF_RE = re.compile(r'(?:async\s*)?def\s+([^( \t]+).*')
 DECORATOR_RE = re.compile(r'@')
 ASSIGNMENT_RE = re.compile(
-    r'^([a-zA-Z_][a-zA-Z_0-9]*)\s*(?::.*)?=\s([\[({]|[(]?[fr]?(?:"""|\'\'\'))$'
+    r'^([a-zA-Z_][a-zA-Z_0-9]*)\s*'  # variable name
+    r'(?::.*)?='                     # optional type hint
+    r'\s.*([\[({]|[(]?[fr]?(?:"""|\'\'\'))$'  # anything ending with an open
+                                              # parenthesis or tripple quotes
 )
 
 
