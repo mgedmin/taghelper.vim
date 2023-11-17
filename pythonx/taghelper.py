@@ -7,9 +7,10 @@ finish
 import vim
 
 import taghelper_c
-import taghelper_python
 import taghelper_diff
+import taghelper_dosini
 import taghelper_js
+import taghelper_python
 
 
 CACHE = {}
@@ -22,6 +23,8 @@ PARSERS = {
     'python': taghelper_python.parse,
     'diff': taghelper_diff.parse,
     'javascript': taghelper_js.parse,
+    'cfg': taghelper_dosini.parse,
+    'dosini': taghelper_dosini.parse,
 }
 
 

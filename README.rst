@@ -24,6 +24,7 @@ Supports multiple languages:
 - C
 - C++
 - diff files
+- .ini files
 
 Doesn't actually use tags files -- instead it has its own hacky parsers.
 
