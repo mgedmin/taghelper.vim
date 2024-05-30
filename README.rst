@@ -25,6 +25,7 @@ Supports multiple languages:
 - C++
 - diff files
 - .ini files
+- Robot Framework test files
 
 Doesn't actually use tags files -- instead it has its own hacky parsers.
 
