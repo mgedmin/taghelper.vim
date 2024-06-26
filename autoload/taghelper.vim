@@ -7,7 +7,7 @@ function taghelper#curtag()
 endfunction
 
 function taghelper#cursormoved()
-  if !exists('b:current_syntax') || b:current_syntax !~ '^\(c\|cpp\|python\|diff\|javascript\|cfg\|dosini\|robot\)\(\.\|$\)'
+  if !exists('b:current_syntax') || b:current_syntax !~ '^\(c\|cpp\|python\|diff\|javascript\|cfg\|dosini\|robot\|help\)\(\.\|$\)'
     let w:TagHelperCurTag = ''
     return
   endif

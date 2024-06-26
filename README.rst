@@ -26,6 +26,7 @@ Supports multiple languages:
 - diff files
 - .ini files
 - Robot Framework test files
+  Vim help files
 
 Doesn't actually use tags files -- instead it has its own hacky parsers.
 

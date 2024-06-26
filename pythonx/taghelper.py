@@ -12,6 +12,7 @@ import taghelper_dosini
 import taghelper_js
 import taghelper_python
 import taghelper_robot
+import taghelper_vimhelp
 
 
 CACHE = {}
@@ -27,6 +28,7 @@ PARSERS = {
     'cfg': taghelper_dosini.parse,
     'dosini': taghelper_dosini.parse,
     'robot': taghelper_robot.parse,
+    'help': taghelper_vimhelp.parse,
 }
 
 
