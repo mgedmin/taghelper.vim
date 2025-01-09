@@ -1,7 +1,7 @@
 Overview
 --------
 
-.. image:: https://github.com/mgedmin/taghelper.vim/workflows/build/badge.svg?branch=master
+.. image:: https://github.com/mgedmin/taghelper.vim/actions/workflows/build.yml/badge.svg?branch=master
     :target: https://github.com/mgedmin/taghelper.vim/actions
 
 
