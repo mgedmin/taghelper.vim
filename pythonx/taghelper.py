@@ -82,8 +82,11 @@ class Tags(object):
 
         parser = PARSERS.get(self.syntax)
         if parser:
+            verbose_print(f'parsing buffer {buffer.number} for {self.syntax}')
             parser(buffer, self)
             self.validate()
+        else:
+            verbose_print(f'no parser for {self.syntax}')
 
     def add(self, name, firstline, lastline=None, autoclose=False):
         if autoclose:
@@ -116,6 +119,12 @@ class Tags(object):
         return best
 
 
+def verbose_print(msg):
+    verbose = vim.bindeval('&verbose')
+    if verbose >= 1:
+        print(msg)
+
+
 def gettags(bufnr=None, changedtick=None):
     if bufnr is None:
         bufnr = vim.current.buffer.number
@@ -123,6 +132,7 @@ def gettags(bufnr=None, changedtick=None):
         changedtick = vim.buffers[bufnr].vars['changedtick']
     cached = CACHE.get(bufnr)
     if cached is not None and cached.changedtick == changedtick:
+        verbose_print(f'using cached tags for buffer {bufnr}')
         return cached
     tags = Tags()
     tags.parse(vim.buffers[bufnr], changedtick)
