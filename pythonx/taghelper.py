@@ -4,6 +4,10 @@ pyx import sys; sys.modules.pop("taghelper", None); import taghelper
 finish
 """
 
+import importlib
+import glob
+import os
+
 import vim
 
 import taghelper_c
@@ -123,6 +127,31 @@ def verbose_print(msg):
     verbose = vim.bindeval('&verbose')
     if verbose >= 1:
         print(msg)
+
+
+def load_plugins():
+    vimruntime = vim.bindeval('&rtp')
+    for path in vimruntime.split(b','):
+        # here we assume python2 is dead dead dead
+        for subpath in b'pythonx', b'python3':
+            for fn in glob.glob(os.path.join(path, subpath, b'taghelper_*.py')):
+                name = os.path.basename(fn).removesuffix(b'.py').decode('UTF-8')
+                try:
+                    mod = importlib.import_module(name)
+                except ImportError as e:
+                    verbose_print(f'skipping {name}: {e}')
+                    continue
+                else:
+                    if not hasattr(mod, 'TAGHELPER_PLUGIN_API_VERSION'):
+                        verbose_print(f'skipping {name}: TAGHELPER_PLUGIN_API_VERSION not defined')
+                        continue
+                    apiver = mod.TAGHELPER_PLUGIN_API_VERSION
+                    if apiver != 1:
+                        verbose_print(f'skipping {name}: TAGHELPER_PLUGIN_API_VERSION is {apiver}, not 1')
+                        continue
+                    PARSERS[mod.TAGHELPER_SYNTAX] = mod.parse
+                    verbose_print(f'loaded {name}')
+    vim.vars['taghelper_supported_syntax'] = supported_syntax()
 
 
 def gettags(bufnr=None, changedtick=None):

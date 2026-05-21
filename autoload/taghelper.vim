@@ -44,6 +44,14 @@ function taghelper#checkpython()
   return 1
 endfunction
 
+function taghelper#loadplugins()
+  if !taghelper#checkpython()
+    return
+  endif
+  pyx import taghelper
+  pyx taghelper.load_plugins()
+endfunction
+
 function taghelper#showtags()
   if !taghelper#checkpython()
     return
@@ -67,5 +75,6 @@ function taghelper#refresh()
   endif
   pyx import taghelper
   pyx taghelper.clear_caches()
+  pyx taghelper.load_plugins()
   call taghelper#cursormoved()
 endfunction

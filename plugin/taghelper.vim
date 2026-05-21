@@ -1,7 +1,7 @@
 " File: taghelper.vim
 " Author: Marius Gedminas <marius@gedmin.as>
-" Version: 0.6.0
-" Last Modified: 2024-06-26
+" Version: 0.7.0
+" Last Modified: 2026-05-21
 
 augroup TagHelper
   autocmd!
@@ -11,3 +11,5 @@ augroup TagHelper
     autocmd BufDelete * silent call taghelper#bufdeleted()
   endif
 augroup END
+
+call taghelper#loadplugins()
