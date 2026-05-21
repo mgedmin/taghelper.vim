@@ -13,12 +13,13 @@ class VimStub(object):
     def __init__(self):
         self.buffers = {}
         self.current = VimCurrentStub(self)
+        self.verbose = 0
 
     def bindeval(self, expr):
         if expr == '&rtp':
             return []
         elif expr == '&verbose':
-            return 0
+            return self.verbose
         else:
             raise NotImplementedError(f'vim.bindeval({expr!r})')
 

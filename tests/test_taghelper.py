@@ -1,4 +1,8 @@
-from taghelper import Tag, Tags, gettags, findtag, deltags, showtags
+import taghelper
+from taghelper import (
+    Tag, Tags, clear_caches, deltags, findtag, gettags, showtags,
+    supported_syntax, verbose_print
+)
 
 
 class BufferStub:
@@ -84,6 +88,40 @@ def test_Tags_add():
     assert tags.tags == [tag]
 
 
+def test_Tags_add_autoclose():
+    tags = Tags()
+    tag1 = tags.add('foo', 1)
+    tag2 = tags.add('bar', 3, autoclose=True)
+    assert tag1 == Tag('foo', 1, 2)
+    assert tag2 == Tag('bar', 3, None)
+
+
+def test_Tags_autoclose():
+    tags = Tags()
+    tag1 = tags.add('foo', 1)
+    tag2 = tags.add('bar', 3, 4)
+    tag3 = tags.add('baz', 6)
+    tag4 = tags.add('qux', 7)
+    tags.autoclose(10)
+    assert tag1 == Tag('foo', 1, None)
+    assert tag2 == Tag('bar', 3, 4)
+    assert tag3 == Tag('baz', 6, 10)
+    assert tag4 == Tag('qux', 7, 10)
+
+
+def test_Tags_autoclose_all():
+    tags = Tags()
+    tag1 = tags.add('foo', 1)
+    tag2 = tags.add('bar', 3, 4)
+    tag3 = tags.add('baz', 6)
+    tag4 = tags.add('qux', 7)
+    tags.autoclose(10, all=True)
+    assert tag1 == Tag('foo', 1, 10)
+    assert tag2 == Tag('bar', 3, 4)
+    assert tag3 == Tag('baz', 6, 10)
+    assert tag4 == Tag('qux', 7, 10)
+
+
 def test_Tags_find():
     tags = Tags()
     foo = tags.add('foo', 3, 7)
@@ -147,6 +185,14 @@ def test_deltags(vim):
     assert tags1 is not tags2
 
 
+def test_clear_caches(vim):
+    vim.buffers[3] = BufferStub(number=3)
+    tags1 = gettags(3, 42)
+    clear_caches()
+    tags2 = gettags(3, 42)
+    assert tags1 is not tags2
+
+
 def test_showtags_none(vim, capsys):
     vim.buffers[3] = BufferStub(number=3)
     showtags(3, 42)
@@ -160,3 +206,20 @@ def test_showtags_some(vim, capsys):
     ], vars={'current_syntax': b'python'})
     showtags(1, 42)
     assert capsys.readouterr().out == '1 tags found\nfoo (lines 1-2)\n'
+
+
+def test_supported_syntax(monkeypatch):
+    monkeypatch.setattr(taghelper, 'PARSERS', dict.fromkeys(['aaa', 'bbb', 'ccc']))
+    assert supported_syntax() == r'^\(aaa\|bbb\|ccc\)\(\.\|$\)'
+
+
+def test_verbose_print_not_verbose(vim, capsys):
+    vim.verbose = 0
+    verbose_print('not verbose')
+    assert capsys.readouterr().out == ''
+
+
+def test_verbose_print_verbose(vim, capsys):
+    vim.verbose = 1
+    verbose_print('now verbose')
+    assert capsys.readouterr().out == 'now verbose\n'
