@@ -85,10 +85,19 @@ class Tags(object):
             parser(buffer, self)
             self.validate()
 
-    def add(self, name, firstline, lastline=None):
+    def add(self, name, firstline, lastline=None, autoclose=False):
+        if autoclose:
+            self.autoclose(firstline - 1)
         tag = Tag(name, firstline, lastline)
         self.tags.append(tag)
         return tag
+
+    def autoclose(self, lastline, all=False):
+        for tag in reversed(self.tags):
+            if tag.lastline is None:
+                tag.lastline = lastline
+            elif not all:
+                break
 
     def validate(self):
         prev = None
