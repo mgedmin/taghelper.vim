@@ -1,3 +1,11 @@
+function taghelper#supported_syntax()
+  if !taghelper#checkpython()
+    return "^$"
+  endif
+  pyx import taghelper
+  return pyxeval("taghelper.supported_syntax()")
+endfunction
+
 function taghelper#curtag()
   if exists("w:TagHelperCurTag")
     return w:TagHelperCurTag
@@ -7,7 +15,10 @@ function taghelper#curtag()
 endfunction
 
 function taghelper#cursormoved()
-  if !exists('b:current_syntax') || b:current_syntax !~ '^\(c\|cpp\|python\|diff\|javascript\|cfg\|dosini\|robot\|help\)\(\.\|$\)'
+  if !exists('g:taghelper_supported_syntax')
+    let g:taghelper_supported_syntax = taghelper#supported_syntax()
+  endif
+  if !exists('b:current_syntax') || b:current_syntax !~ g:taghelper_supported_syntax
     let w:TagHelperCurTag = ''
     return
   endif

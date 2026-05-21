@@ -17,8 +17,6 @@ import taghelper_vimhelp
 
 CACHE = {}
 
-# NB: if you add a supported language, be sure to update the regex in
-# autoload/taghelper.vim too!
 PARSERS = {
     'c': taghelper_c.parse,
     'cpp': taghelper_c.parse,
@@ -144,3 +142,7 @@ def showtags(bufnr=None, changedtick=None):
     print("%d tags found" % len(tags))
     for tag in tags:
         print(tag)
+
+
+def supported_syntax():
+    return r'^\({}\)\(\.\|$\)'.format(r'\|'.join(PARSERS))
