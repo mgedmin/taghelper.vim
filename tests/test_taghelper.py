@@ -1,8 +1,14 @@
+import pathlib
+import sys
+
 import taghelper
 from taghelper import (
-    Tag, Tags, clear_caches, deltags, findtag, gettags, showtags,
+    Tag, Tags, clear_caches, deltags, findtag, gettags, load_plugins, showtags,
     supported_syntax, verbose_print
 )
+
+
+here = pathlib.Path(__file__).parent
 
 
 class BufferStub:
@@ -223,3 +229,14 @@ def test_verbose_print_verbose(vim, capsys):
     vim.verbose = 1
     verbose_print('now verbose')
     assert capsys.readouterr().out == 'now verbose\n'
+
+
+def test_load_plugins(vim, monkeypatch):
+    monkeypatch.setattr(taghelper, 'PARSERS', dict.fromkeys(['aaa']))
+    monkeypatch.setattr(sys, 'path', sys.path + [str(here / 'plugins/pythonx')])
+    vim.runtimepath = [here / 'plugins']
+    load_plugins()
+    assert vim.vars['taghelper_supported_syntax'], r'^\(aaa\|bbb\)\(\.\|$\)'
+    tags = Tags()
+    taghelper.PARSERS['bbb'](BufferStub(), tags)
+    assert tags.tags == [Tag('hello', 1, None)]

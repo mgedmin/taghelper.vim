@@ -14,10 +14,12 @@ class VimStub(object):
         self.buffers = {}
         self.current = VimCurrentStub(self)
         self.verbose = 0
+        self.vars = {}
+        self.runtimepath = []
 
     def bindeval(self, expr):
         if expr == '&rtp':
-            return []
+            return b','.join(str(d).encode() for d in self.runtimepath)
         elif expr == '&verbose':
             return self.verbose
         else:
