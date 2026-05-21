@@ -156,6 +156,10 @@ def deltags(bufnr):
     CACHE.pop(bufnr, None)
 
 
+def clear_caches():
+    CACHE.clear()
+
+
 def showtags(bufnr=None, changedtick=None):
     tags = gettags(bufnr, changedtick)
     print("%d tags found" % len(tags))

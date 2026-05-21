@@ -60,3 +60,12 @@ function taghelper#reimport()
   pyx [importlib.reload(v) for k, v in list(sys.modules.items()) if k.startswith('taghelper_')]
   pyx importlib.reload(taghelper)
 endfunction
+
+function taghelper#refresh()
+  if !taghelper#checkpython()
+    return
+  endif
+  pyx import taghelper
+  pyx taghelper.clear_caches()
+  call taghelper#cursormoved()
+endfunction
