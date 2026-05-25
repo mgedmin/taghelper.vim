@@ -73,7 +73,7 @@ The ``buffer`` object is a vim.Buffer, as described in Vim's ``:help
 python-buffer``.  The ``tags`` object is a taghelper.Tags and it has the
 following methods:
 
-- def add(name, firstlineno, lastlineno=None, autoclose=False)
+- def add(name, firstline, lastline=None, autoclose=False)
 
   Define a new tag starting on firstlineno.  If lastlineno is not specified,
   the tag extends until the end of the buffer.  You can change the lastlineno
@@ -82,15 +82,23 @@ following methods:
   If autoclose is True, calls tags.autoclose(firstlineno - 1) before adding the
   new tag.
 
-  Returns the tag object (so you can change the lastlineno later).
+  Returns the tag object (so you can change the lastline later).
 
-- def autoclose(lastlineno=None, all=False)
+- def autoclose(lastline=None, all=False)
 
-  Set the lastlineno for all recently added tags that don't have a lastlineno
+  Set the lastline for all recently added tags that don't have a lastlineno
   set.  Stops at the most recent tag that does have a lastlineno set.
 
   If all is True, sets lastlineno for _all_ tags that don't have lastlineno
   set, not just for the most recent ones.
+
+The tag object has the following methods:
+
+- def close(lastline)
+
+  Sets the lastline for this tag.  (The only reason for having a method is to
+  catch errors when I forget the spelling of the attribute and try to assign to
+  tag.lastlineno or something.)
 
 All line numbers are 1-based.
 

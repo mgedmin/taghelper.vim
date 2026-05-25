@@ -56,6 +56,9 @@ class Tag(object):
         return (self.name, self.firstline, self.lastline) == (
             other.name, other.firstline, other.lastline)
 
+    def close(self, lastline):
+        self.lastline = lastline
+
 
 class Tags(object):
     def __init__(self):
