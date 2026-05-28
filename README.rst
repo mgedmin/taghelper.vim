@@ -69,6 +69,10 @@ directory of any plugin on &runtimepath, with the following contents::
 
 Adjust the parsing code as desired.
 
+``TAGHELPER_SYNTAX`` can be a string or a list/tuple of strings containing the
+names of Vim syntax (``b:current_syntax``, which sometimes differs from
+``&syntax`` or ``&filetype``, e.g. ``'bash'`` vs ``'sh'``!).
+
 The ``buffer`` object is a vim.Buffer, as described in Vim's ``:help
 python-buffer``.  The ``tags`` object is a taghelper.Tags and it has the
 following methods:

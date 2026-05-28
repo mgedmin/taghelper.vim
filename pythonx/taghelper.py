@@ -152,7 +152,12 @@ def load_plugins():
                     if apiver != 1:
                         verbose_print(f'skipping {name}: TAGHELPER_PLUGIN_API_VERSION is {apiver}, not 1')
                         continue
-                    PARSERS[mod.TAGHELPER_SYNTAX] = mod.parse
+                    if isinstance(mod.TAGHELPER_SYNTAX, str):
+                        syntaxes = [mod.TAGHELPER_SYNTAX]
+                    else:
+                        syntaxes = mod.TAGHELPER_SYNTAX
+                    for syntax in syntaxes:
+                        PARSERS[syntax] = mod.parse
                     verbose_print(f'loaded {name}')
     vim.vars['taghelper_supported_syntax'] = supported_syntax()
 
