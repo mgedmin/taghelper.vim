@@ -132,33 +132,44 @@ def verbose_print(msg):
         print(msg)
 
 
-def load_plugins():
+def find_plugins():
     vimruntime = vim.bindeval('&rtp')
     for path in vimruntime.split(b','):
         # here we assume python2 is dead dead dead
-        for subpath in b'pythonx', b'python3':
-            for fn in glob.glob(os.path.join(path, subpath, b'taghelper_*.py')):
-                name = os.path.basename(fn).removesuffix(b'.py').decode('UTF-8')
-                try:
-                    mod = importlib.import_module(name)
-                except ImportError as e:
-                    verbose_print(f'skipping {name}: {e}')
-                    continue
-                else:
-                    if not hasattr(mod, 'TAGHELPER_PLUGIN_API_VERSION'):
-                        verbose_print(f'skipping {name}: TAGHELPER_PLUGIN_API_VERSION not defined')
-                        continue
-                    apiver = mod.TAGHELPER_PLUGIN_API_VERSION
-                    if apiver != 1:
-                        verbose_print(f'skipping {name}: TAGHELPER_PLUGIN_API_VERSION is {apiver}, not 1')
-                        continue
-                    if isinstance(mod.TAGHELPER_SYNTAX, str):
-                        syntaxes = [mod.TAGHELPER_SYNTAX]
-                    else:
-                        syntaxes = mod.TAGHELPER_SYNTAX
-                    for syntax in syntaxes:
-                        PARSERS[syntax] = mod.parse
-                    verbose_print(f'loaded {name}')
+        for subdir in b'pythonx', b'python3':
+            for fn in glob.glob(os.path.join(path, subdir, b'taghelper_*.py')):
+                name = os.path.basename(fn).removesuffix(b'.py')
+                yield name.decode('UTF-8')
+
+
+def load_plugins():
+    for name in find_plugins():
+        try:
+            mod = importlib.import_module(name)
+        except ImportError as e:
+            verbose_print(f'skipping {name}: {e}')
+            continue
+        else:
+            if not hasattr(mod, 'TAGHELPER_PLUGIN_API_VERSION'):
+                verbose_print(
+                    f'skipping {name}:'
+                    f' TAGHELPER_PLUGIN_API_VERSION not defined'
+                )
+                continue
+            apiver = mod.TAGHELPER_PLUGIN_API_VERSION
+            if apiver != 1:
+                verbose_print(
+                    f'skipping {name}:'
+                    f' TAGHELPER_PLUGIN_API_VERSION is {apiver}, not 1'
+                )
+                continue
+            if isinstance(mod.TAGHELPER_SYNTAX, str):
+                syntaxes = [mod.TAGHELPER_SYNTAX]
+            else:
+                syntaxes = mod.TAGHELPER_SYNTAX
+            for syntax in syntaxes:
+                PARSERS[syntax] = mod.parse
+            verbose_print(f'loaded {name}')
     vim.vars['taghelper_supported_syntax'] = supported_syntax()
 
 
