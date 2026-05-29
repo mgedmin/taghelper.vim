@@ -3,4 +3,4 @@ TAGHELPER_SYNTAX = 'bbb'
 
 
 def parse(buffer, tags):
-    tags.add('hello', 1)
+    tags.add('hello_bbb', 1)

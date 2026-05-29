@@ -105,7 +105,7 @@ class Tags(object):
     def autoclose(self, lastline, all=False):
         for tag in reversed(self.tags):
             if tag.lastline is None:
-                tag.lastline = lastline
+                tag.close(lastline)
             elif not all:
                 break
 
@@ -205,4 +205,4 @@ def showtags(bufnr=None, changedtick=None):
 
 
 def supported_syntax():
-    return r'^\({}\)\(\.\|$\)'.format(r'\|'.join(PARSERS))
+    return r'^\({}\)\(\.\|$\)'.format(r'\|'.join(sorted(PARSERS)))

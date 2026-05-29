@@ -66,8 +66,10 @@ def test_Tags_get_syntax():
     tags = Tags()
     assert tags.get_syntax(BufferStub()) == ''
     assert tags.get_syntax(BufferStub(vars={'current_syntax': b''})) == ''
-    assert tags.get_syntax(BufferStub(vars={'current_syntax': b'cpp'})) == 'cpp'
     assert tags.get_syntax(BufferStub(vars={'current_syntax': b'c.x'})) == 'c'
+    assert (
+        tags.get_syntax(BufferStub(vars={'current_syntax': b'cpp'})) == 'cpp'
+    )
 
 
 def test_Tags_parse_no_syntax():
@@ -215,7 +217,9 @@ def test_showtags_some(vim, capsys):
 
 
 def test_supported_syntax(monkeypatch):
-    monkeypatch.setattr(taghelper, 'PARSERS', dict.fromkeys(['aaa', 'bbb', 'ccc']))
+    monkeypatch.setattr(
+        taghelper, 'PARSERS', dict.fromkeys(['aaa', 'ccc', 'bbb'])
+    )
     assert supported_syntax() == r'^\(aaa\|bbb\|ccc\)\(\.\|$\)'
 
 
@@ -231,12 +235,26 @@ def test_verbose_print_verbose(vim, capsys):
     assert capsys.readouterr().out == 'now verbose\n'
 
 
+def parse(syntax: str) -> Tags:
+    tags = Tags()
+    taghelper.PARSERS[syntax](BufferStub(), tags)
+    return tags
+
+
 def test_load_plugins(vim, monkeypatch):
-    monkeypatch.setattr(taghelper, 'PARSERS', dict.fromkeys(['aaa']))
-    monkeypatch.setattr(sys, 'path', sys.path + [str(here / 'plugins/pythonx')])
+    monkeypatch.setattr(taghelper, 'PARSERS', dict.fromkeys(['ccc']))
+    monkeypatch.setattr(
+        sys, 'path', sys.path + [str(here / 'plugins/pythonx')]
+    )
     vim.runtimepath = [here / 'plugins']
     load_plugins()
-    assert vim.vars['taghelper_supported_syntax'], r'^\(aaa\|bbb\)\(\.\|$\)'
-    tags = Tags()
-    taghelper.PARSERS['bbb'](BufferStub(), tags)
-    assert tags.tags == [Tag('hello', 1, None)]
+    assert (
+        vim.vars['taghelper_supported_syntax']
+        == r'^\(aa\|aaa\|bbb\|ccc\)\(\.\|$\)'
+    )
+    tags = parse('aa')
+    assert tags.tags == [Tag('hello_aaa', 1, None)]
+    tags = parse('aaa')
+    assert tags.tags == [Tag('hello_aaa', 1, None)]
+    tags = parse('bbb')
+    assert tags.tags == [Tag('hello_bbb', 1, None)]
