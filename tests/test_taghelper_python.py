@@ -164,3 +164,25 @@ def test_parse_long_assignments():
         Tag('bar', 9, 12),
         Tag('baz', 13, 17),
     ]
+
+
+def test_parse_generics():
+    buffer = prepare('''
+         1|#!/usr/bin/python3
+         2|import enum
+         3|
+         4|class MyClass[T, E: enum.Enum]:
+         5|    x: T = 42
+         6|    def __init__(self):
+         7|        pass
+         8|
+         9|    def bar[U](self, e: E) -> U:
+        10|        pass
+    ''')
+    tags = Tags()
+    parse(buffer, tags)
+    assert tags.tags == [
+        Tag('MyClass', 4, 10),
+        Tag('MyClass.__init__', 6, 8),
+        Tag('MyClass.bar', 9, 10),
+    ]
