@@ -1,0 +1,19 @@
+[lint]
+extend-ignore = [
+  "C408",   # Unnecessary `dict()` call (rewrite as a literal)
+  "UP031",  # Use format specifiers instead of percent format
+  "RUF059", # Unpacked variable `comment` is never used
+  "SIM102", # Use a single `if` statement instead of nested `if` statements
+]
+
+[lint.per-file-ignores]
+"tests/plugins/pythonx/taghelper_importerror.py" = ["F401"]
+"tests/**.py" = [
+  "UP004",
+]
+
+[lint.isort]
+detect-same-package = true
+default-section = "first-party"
+known-third-party = ["vim"]
+lines-after-imports = 2

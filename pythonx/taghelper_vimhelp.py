@@ -1,6 +1,7 @@
 # Vim help files
 import re
 
+
 TAG_RE = re.compile(r'[*]([#-)!+-~]+)[*]')
 
 

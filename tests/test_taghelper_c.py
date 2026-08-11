@@ -1,4 +1,4 @@
-from taghelper import Tags, Tag
+from taghelper import Tag, Tags
 from taghelper_c import parse
 
 

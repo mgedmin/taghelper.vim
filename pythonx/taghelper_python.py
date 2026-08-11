@@ -6,6 +6,7 @@ finish
 """
 import re
 
+
 INDENT_COMMENT_RE = re.compile(r'(\s*)([^#]*)(.*)')
 CLASS_RE = re.compile(r'class\s+([^\[(: \t]+).*')
 DEF_RE = re.compile(r'(?:async\s*)?def\s+([^\[( \t]+).*')

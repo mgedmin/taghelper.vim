@@ -3,8 +3,16 @@ import sys
 
 import taghelper
 from taghelper import (
-    Tag, Tags, clear_caches, deltags, findtag, gettags, load_plugins, showtags,
-    supported_syntax, verbose_print
+    Tag,
+    Tags,
+    clear_caches,
+    deltags,
+    findtag,
+    gettags,
+    load_plugins,
+    showtags,
+    supported_syntax,
+    verbose_print,
 )
 
 
