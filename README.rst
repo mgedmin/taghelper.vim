@@ -21,6 +21,7 @@ Needs Vim 8.0.0251 or newer, built with Python support.
 Supports multiple languages:
 
 - Python
+- Ruby
 - C
 - C++
 - diff files

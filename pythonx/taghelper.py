@@ -4,8 +4,8 @@ pyx import sys; sys.modules.pop("taghelper", None); import taghelper
 finish
 """
 
-import importlib
 import glob
+import importlib
 import os
 
 import vim
@@ -16,6 +16,7 @@ import taghelper_dosini
 import taghelper_js
 import taghelper_python
 import taghelper_robot
+import taghelper_ruby
 import taghelper_vimhelp
 
 
@@ -30,11 +31,12 @@ PARSERS = {
     'cfg': taghelper_dosini.parse,
     'dosini': taghelper_dosini.parse,
     'robot': taghelper_robot.parse,
+    'ruby': taghelper_ruby.parse,
     'help': taghelper_vimhelp.parse,
 }
 
 
-class Tag(object):
+class Tag:
 
     def __init__(self, name, firstline, lastline=None):
         self.name = name
@@ -60,7 +62,7 @@ class Tag(object):
         self.lastline = lastline
 
 
-class Tags(object):
+class Tags:
     def __init__(self):
         self.changedtick = None
         self.tags = []
