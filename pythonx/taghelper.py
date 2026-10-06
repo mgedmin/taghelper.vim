@@ -7,6 +7,7 @@ finish
 import glob
 import importlib
 import os
+import sys
 
 import vim
 
@@ -144,10 +145,16 @@ def find_plugins():
                 yield name.decode('UTF-8')
 
 
-def load_plugins():
+def load_plugins(reload=False):
     for name in find_plugins():
+        mod = sys.modules.get(name)
+        reloaded = False
         try:
-            mod = importlib.import_module(name)
+            if mod is not None and reload:
+                mod = importlib.reload(mod)
+                reloaded = True
+            else:
+                mod = importlib.import_module(name)
         except ImportError as e:
             verbose_print(f'skipping {name}: {e}')
             continue
@@ -171,7 +178,10 @@ def load_plugins():
                 syntaxes = mod.TAGHELPER_SYNTAX
             for syntax in syntaxes:
                 PARSERS[syntax] = mod.parse
-            verbose_print(f'loaded {name}')
+            if reloaded:
+                verbose_print(f'reloaded {name}')
+            else:
+                verbose_print(f'loaded {name}')
     vim.vars['taghelper_supported_syntax'] = supported_syntax()
 
 

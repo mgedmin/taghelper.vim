@@ -75,6 +75,6 @@ function taghelper#refresh()
   endif
   pyx import taghelper
   pyx taghelper.clear_caches()
-  pyx taghelper.load_plugins()
+  pyx taghelper.load_plugins(reload=True)
   call taghelper#cursormoved()
 endfunction
