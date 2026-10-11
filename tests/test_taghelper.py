@@ -266,3 +266,24 @@ def test_load_plugins(vim, monkeypatch):
     assert tags.tags == [Tag('hello_aaa', 1, None)]
     tags = parse('bbb')
     assert tags.tags == [Tag('hello_bbb', 1, None)]
+
+
+def test_reload_plugins(vim, monkeypatch):
+    monkeypatch.setattr(taghelper, 'PARSERS', dict.fromkeys(['ccc']))
+    monkeypatch.setattr(
+        sys, 'path', sys.path + [str(here / 'plugins/pythonx')]
+    )
+    vim.runtimepath = [here / 'plugins']
+    load_plugins()
+    sys.modules['taghelper_aaa'].parse = None
+    load_plugins(reload=True)
+    assert (
+        vim.vars['taghelper_supported_syntax']
+        == r'^\(aa\|aaa\|bbb\|ccc\)\(\.\|$\)'
+    )
+    tags = parse('aa')
+    assert tags.tags == [Tag('hello_aaa', 1, None)]
+    tags = parse('aaa')
+    assert tags.tags == [Tag('hello_aaa', 1, None)]
+    tags = parse('bbb')
+    assert tags.tags == [Tag('hello_bbb', 1, None)]
